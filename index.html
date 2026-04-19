@@ -22,12 +22,10 @@
       --text-2: #6B7684;
       --text-3: #B0B8C1;
       --border: #E8ECF0;
-      --green-bg: #F0FDF4;
-      --green-text: #15803D;
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 20px;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 10px;
+      --radius-xl: 12px;
       --radius-full: 100px;
     }
 
@@ -316,35 +314,34 @@
       letter-spacing: 0.2px;
     }
 
+    .result-headline {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .result-age-big {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+
+    .result-slash {
+      font-size: 30px;
+      font-weight: 300;
+      color: var(--text-3);
+    }
+
     .result-breed {
       font-size: 38px;
       font-weight: 800;
       color: var(--text-1);
       letter-spacing: -0.8px;
-      line-height: 1.15;
-      margin-bottom: 14px;
-    }
-
-    .result-age-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .result-age-badge {
-      background: var(--green-bg);
-      color: var(--green-text);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: var(--radius-full);
-    }
-
-    .result-age-note {
-      font-size: 12px;
-      color: var(--text-3);
-      line-height: 1.4;
+      line-height: 1.1;
     }
 
     /* Meme card */
@@ -365,7 +362,7 @@
     }
 
     .meme-text {
-      font-size: 16px;
+      font-size: 19px;
       font-weight: 500;
       color: #fff;
       line-height: 1.75;
@@ -375,19 +372,23 @@
     /* Reason card */
     .reason-card {
       margin: 0 24px 24px;
-      background: var(--surface);
-      border-radius: var(--radius-xl);
-      padding: 24px;
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
     }
 
-    .reason-card .card-label {
+    .reason-label {
+      font-size: 11px;
+      font-weight: 600;
       color: var(--text-3);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
     }
 
     .reason-text {
-      font-size: 15px;
-      color: var(--text-1);
-      line-height: 1.75;
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.7;
     }
 
     /* Retry */
@@ -557,20 +558,20 @@
   <div class="container">
     <div class="result-header">
       <div class="result-eyebrow">나의 견종</div>
-      <div class="result-breed" id="resultBreed">골든 리트리버</div>
-      <div class="result-age-row">
-        <span class="result-age-badge" id="resultAge">약 35살</span>
-        <span class="result-age-note" id="resultAgeNote">첫 2년은 15배, 이후 매년 5배 환산</span>
+      <div class="result-headline">
+        <span class="result-age-big" id="resultAge">—</span>
+        <span class="result-slash">/</span>
+        <span class="result-breed" id="resultBreed">—</span>
       </div>
     </div>
 
     <div class="meme-card">
-      <div class="card-label">친구의 한마디</div>
+      <div class="card-label" id="memeCardLabel">친구의 한마디</div>
       <div class="meme-text" id="resultMeme"></div>
     </div>
 
     <div class="reason-card">
-      <div class="card-label">이 견종인 이유</div>
+      <div class="reason-label">이 견종인 이유</div>
       <div class="reason-text" id="resultReason"></div>
     </div>
 
@@ -671,11 +672,20 @@
     }
   });
 
+  function formatDogAge(val) {
+    const n = parseFloat(val);
+    if (isNaN(n)) return '-';
+    const rounded = Math.round(n * 2) / 2;
+    const whole = Math.floor(rounded);
+    return rounded - whole === 0.5 ? `${whole}살 반` : `${whole}살`;
+  }
+
   // Render result
   function renderResult(data) {
-    $('resultBreed').textContent = data.breed || '-';
-    $('resultAge').textContent = data.dog_age || '-';
-    $('resultAgeNote').textContent = data.dog_age_note || '';
+    const breed = data.breed || '-';
+    $('resultBreed').textContent = breed;
+    $('resultAge').textContent = formatDogAge(data.dog_age);
+    $('memeCardLabel').textContent = `${breed} 친구의 한마디`;
     $('resultMeme').textContent = data.meme_message || '';
     $('resultReason').textContent = data.reason || '';
   }
