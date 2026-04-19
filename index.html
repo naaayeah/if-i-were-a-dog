@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>내가 개라면...</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --primary: #E8294B;
+      --primary-dark: #C41E3A;
+      --primary-light: #FFF0F3;
+      --bg: #F2F4F6;
+      --surface: #FFFFFF;
+      --text-1: #191F28;
+      --text-2: #6B7684;
+      --text-3: #B0B8C1;
+      --border: #E8ECF0;
+      --green-bg: #F0FDF4;
+      --green-text: #15803D;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 100px;
+    }
+
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', sans-serif;
+      background: var(--bg);
+      color: var(--text-1);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+
+    /* ── FORM SCREEN ── */
+    .form-screen .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding-bottom: 120px;
+    }
+
+    .form-header {
+      padding: 56px 24px 32px;
+    }
+
+    .form-header-eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: 0.3px;
+      margin-bottom: 10px;
+    }
+
+    .form-header-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--text-1);
+      line-height: 1.25;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .form-header-desc {
+      font-size: 15px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* Section */
+    .form-section {
+      padding: 0 24px;
+      margin-bottom: 32px;
+    }
+
+    .form-section-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      letter-spacing: 0.2px;
+      margin-bottom: 12px;
+    }
+
+    /* Status grid */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .status-card {
+      background: var(--surface);
+      border: 2px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 14px 12px;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+      text-align: center;
+    }
+
+    .status-card:active {
+      transform: scale(0.97);
+    }
+
+    .status-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .status-card-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-1);
+    }
+
+    .status-card.selected .status-card-text {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .status-card.full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* Traits */
+    .trait-group {
+      margin-bottom: 16px;
+    }
+
+    .trait-group-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-3);
+      margin-bottom: 8px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-1);
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.12s, background 0.12s, color 0.12s;
+    }
+
+    .chip:active {
+      transform: scale(0.95);
+    }
+
+    .chip.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Age input */
+    .age-box {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .age-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-1);
+      font-family: inherit;
+      background: transparent;
+      width: 80px;
+      min-width: 0;
+    }
+
+    .age-input::placeholder {
+      color: var(--text-3);
+    }
+
+    .age-unit {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text-2);
+    }
+
+    /* Fixed submit */
+    .submit-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 24px 40px;
+      background: linear-gradient(to top, var(--bg) 70%, transparent);
+      pointer-events: none;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s, transform 0.1s;
+      font-family: inherit;
+      pointer-events: all;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
+      background: var(--primary-dark);
+    }
+
+    .submit-btn:disabled {
+      background: var(--border);
+      color: var(--text-3);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── LOADING SCREEN ── */
+    .loading-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .loading-screen.active {
+      display: flex;
+    }
+
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      margin-bottom: 28px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    .loading-desc {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    /* ── RESULT SCREEN ── */
+    .result-screen .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding-bottom: 60px;
+    }
+
+    .result-header {
+      padding: 56px 24px 24px;
+    }
+
+    .result-eyebrow {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: 16px;
+      letter-spacing: 0.2px;
+    }
+
+    .result-breed {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--text-1);
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .result-age-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .result-age-badge {
+      background: var(--green-bg);
+      color: var(--green-text);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+    }
+
+    .result-age-note {
+      font-size: 12px;
+      color: var(--text-3);
+      line-height: 1.4;
+    }
+
+    /* Meme card */
+    .meme-card {
+      margin: 0 24px 12px;
+      background: var(--primary);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+    }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .meme-text {
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      line-height: 1.75;
+      white-space: pre-line;
+    }
+
+    /* Reason card */
+    .reason-card {
+      margin: 0 24px 24px;
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+    }
+
+    .reason-card .card-label {
+      color: var(--text-3);
+    }
+
+    .reason-text {
+      font-size: 15px;
+      color: var(--text-1);
+      line-height: 1.75;
+    }
+
+    /* Retry */
+    .retry-area {
+      padding: 0 24px;
+    }
+
+    .retry-btn {
+      width: 100%;
+      background: var(--surface);
+      color: var(--text-1);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 17px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s, transform 0.1s;
+      font-family: inherit;
+    }
+
+    .retry-btn:active {
+      background: var(--bg);
+      transform: scale(0.98);
+    }
+
+    /* Error toast */
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #191F28;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 20px;
+      border-radius: var(--radius-full);
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- FORM SCREEN -->
+<div id="formScreen" class="page form-screen active">
+  <div class="container">
+    <div class="form-header">
+      <div class="form-header-eyebrow">내가 개라면...</div>
+      <h1 class="form-header-title">이곳이 현실일 리 없어</h1>
+      <p class="form-header-desc">왈왈(너 꿈꿨니?).<br>왈왈(산책하러 가자!)</p>
+    </div>
+
+    <!-- Status -->
+    <div class="form-section">
+      <div class="form-section-label">현재 상태를 선택해주세요</div>
+      <div class="status-grid" id="statusGrid">
+        <div class="status-card" data-value="중고생"><span class="status-card-text">중고생</span></div>
+        <div class="status-card" data-value="대학생"><span class="status-card-text">대학생</span></div>
+        <div class="status-card" data-value="취준생"><span class="status-card-text">취준생</span></div>
+        <div class="status-card" data-value="직장인"><span class="status-card-text">직장인</span></div>
+        <div class="status-card" data-value="자영업자·프리랜서"><span class="status-card-text">자영업자·프리랜서</span></div>
+        <div class="status-card" data-value="주부"><span class="status-card-text">주부</span></div>
+        <div class="status-card full-width" data-value="기타"><span class="status-card-text">기타</span></div>
+      </div>
+    </div>
+
+    <!-- Traits -->
+    <div class="form-section">
+      <div class="form-section-label">나의 특징을 선택해주세요 (여러 개 선택 가능)</div>
+
+      <div class="trait-group">
+        <div class="trait-group-label">내 성격 특징은?</div>
+        <div class="chips" id="traitChips">
+          <div class="chip" data-value="활발한 편">활발한 편</div>
+          <div class="chip" data-value="조용한 편">조용한 편</div>
+          <div class="chip" data-value="다정함">다정함</div>
+          <div class="chip" data-value="독립적">독립적</div>
+          <div class="chip" data-value="예민한 편">예민한 편</div>
+          <div class="chip" data-value="느긋함">느긋함</div>
+          <div class="chip" data-value="고집 있음">고집 있음</div>
+          <div class="chip" data-value="사교적">사교적</div>
+          <div class="chip" data-value="호기심 많음">호기심 많음</div>
+          <div class="chip" data-value="낙천적">낙천적</div>
+          <div class="chip" data-value="걱정이 많음">걱정이 많음</div>
+          <div class="chip" data-value="리더십 있음">리더십 있음</div>
+          <div class="chip" data-value="눈치 빠름">눈치 빠름</div>
+          <div class="chip" data-value="솔직한 편">솔직한 편</div>
+          <div class="chip" data-value="감수성 풍부">감수성 풍부</div>
+          <div class="chip" data-value="겁이 많음">겁이 많음</div>
+          <div class="chip" data-value="완벽주의">완벽주의</div>
+          <div class="chip" data-value="변덕스러운 편">변덕스러운 편</div>
+          <div class="chip" data-value="배려심 깊음">배려심 깊음</div>
+        </div>
+      </div>
+
+      <div class="trait-group">
+        <div class="trait-group-label">내 외모 특징은?</div>
+        <div class="chips">
+          <div class="chip" data-value="키가 큰 편">키가 큰 편</div>
+          <div class="chip" data-value="키가 작은 편">키가 작은 편</div>
+          <div class="chip" data-value="통통한 편">통통한 편</div>
+          <div class="chip" data-value="마른 편">마른 편</div>
+          <div class="chip" data-value="곱슬머리">곱슬머리</div>
+          <div class="chip" data-value="잘 꾸미는 편">잘 꾸미는 편</div>
+          <div class="chip" data-value="무심한 스타일">무심한 스타일</div>
+        </div>
+      </div>
+
+      <div class="trait-group">
+        <div class="trait-group-label">나의 습관은?</div>
+        <div class="chips">
+          <div class="chip" data-value="잠이 많음">잠이 많음</div>
+          <div class="chip" data-value="잘 먹음">잘 먹음</div>
+          <div class="chip" data-value="운동을 좋아함">운동을 좋아함</div>
+          <div class="chip" data-value="집순이·집돌이">집순이·집돌이</div>
+          <div class="chip" data-value="야행성">야행성</div>
+          <div class="chip" data-value="낮잠을 즐김">낮잠을 즐김</div>
+          <div class="chip" data-value="깔끔한 편">깔끔한 편</div>
+          <div class="chip" data-value="산만한 편">산만한 편</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Age -->
+    <div class="form-section">
+      <div class="form-section-label">나이</div>
+      <div class="age-box">
+        <input
+          class="age-input"
+          id="ageInput"
+          type="number"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          placeholder="25"
+          min="1"
+          max="120"
+        />
+        <span class="age-unit">세</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-bar">
+    <button class="submit-btn" id="submitBtn" disabled>분석하기</button>
+  </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="loading-screen">
+  <div class="spinner"></div>
+  <div class="loading-title">내가 개라면...</div>
+  <div class="loading-desc">널 찾고 있어.<br>잠깐만 기다려봐.</div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="page result-screen">
+  <div class="container">
+    <div class="result-header">
+      <div class="result-eyebrow">나의 견종</div>
+      <div class="result-breed" id="resultBreed">골든 리트리버</div>
+      <div class="result-age-row">
+        <span class="result-age-badge" id="resultAge">약 35살</span>
+        <span class="result-age-note" id="resultAgeNote">첫 2년은 15배, 이후 매년 5배 환산</span>
+      </div>
+    </div>
+
+    <div class="meme-card">
+      <div class="card-label">친구의 한마디</div>
+      <div class="meme-text" id="resultMeme"></div>
+    </div>
+
+    <div class="reason-card">
+      <div class="card-label">이 견종인 이유</div>
+      <div class="reason-text" id="resultReason"></div>
+    </div>
+
+    <div class="retry-area">
+      <button class="retry-btn" id="retryBtn">다시 분석하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Error toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  // State
+  let selectedStatus = '';
+  const selectedTraits = new Set();
+
+  // Screen toggle
+  function showScreen(name) {
+    document.querySelectorAll('.page, .loading-screen').forEach(el => {
+      el.classList.remove('active');
+    });
+    $(name + 'Screen').classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  // Status selection
+  $('statusGrid').querySelectorAll('.status-card').forEach(card => {
+    card.addEventListener('click', () => {
+      $('statusGrid').querySelectorAll('.status-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedStatus = card.dataset.value;
+      updateSubmitBtn();
+    });
+  });
+
+  // Trait chip selection (collect all chip containers)
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      chip.classList.toggle('selected');
+      const val = chip.dataset.value;
+      if (chip.classList.contains('selected')) {
+        selectedTraits.add(val);
+      } else {
+        selectedTraits.delete(val);
+      }
+    });
+  });
+
+  // Age input
+  $('ageInput').addEventListener('input', updateSubmitBtn);
+
+  function updateSubmitBtn() {
+    const age = parseInt($('ageInput').value, 10);
+    const valid = selectedStatus && age >= 1 && age <= 120;
+    $('submitBtn').disabled = !valid;
+  }
+
+  // Toast
+  function showToast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // Submit
+  $('submitBtn').addEventListener('click', async () => {
+    const age = parseInt($('ageInput').value, 10);
+    if (!selectedStatus || !age) return;
+
+    showScreen('loading');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: selectedStatus,
+          traits: Array.from(selectedTraits),
+          age,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || '서버 오류');
+      }
+
+      const data = await res.json();
+      renderResult(data);
+      showScreen('result');
+    } catch (e) {
+      showScreen('form');
+      showToast(e.message || '오류가 발생했어. 다시 시도해봐.');
+    }
+  });
+
+  // Render result
+  function renderResult(data) {
+    $('resultBreed').textContent = data.breed || '-';
+    $('resultAge').textContent = data.dog_age || '-';
+    $('resultAgeNote').textContent = data.dog_age_note || '';
+    $('resultMeme').textContent = data.meme_message || '';
+    $('resultReason').textContent = data.reason || '';
+  }
+
+  // Retry
+  $('retryBtn').addEventListener('click', () => {
+    showScreen('form');
+  });
+</script>
+</body>
+</html>
