@@ -344,6 +344,42 @@
       line-height: 1.1;
     }
 
+    /* Breed image */
+    .breed-image-wrap {
+      margin: 0 24px 16px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: var(--border);
+      position: relative;
+    }
+
+    .breed-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .breed-image.loaded {
+      opacity: 1;
+    }
+
+    .breed-image-skeleton {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--border) 25%, #dde1e6 50%, var(--border) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
     /* Meme card */
     .meme-card {
       margin: 0 24px 12px;
@@ -565,6 +601,11 @@
       </div>
     </div>
 
+    <div class="breed-image-wrap" id="breedImageWrap">
+      <div class="breed-image-skeleton" id="breedImageSkeleton"></div>
+      <img class="breed-image" id="breedImage" alt="견종 이미지" />
+    </div>
+
     <div class="meme-card">
       <div class="card-label" id="memeCardLabel">친구의 한마디</div>
       <div class="meme-text" id="resultMeme"></div>
@@ -672,6 +713,25 @@
     }
   });
 
+  async function fetchBreedImage(query) {
+    const tryFetch = async (url) => {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.status === 'success') return data.message;
+      return null;
+    };
+    if (query) {
+      try {
+        const img = await tryFetch(`https://dog.ceo/api/breed/${query}/images/random`);
+        if (img) return img;
+      } catch {}
+    }
+    try {
+      return await tryFetch('https://dog.ceo/api/breeds/image/random');
+    } catch {}
+    return null;
+  }
+
   function formatDogAge(val) {
     const n = parseFloat(val);
     if (isNaN(n)) return '-';
@@ -688,6 +748,21 @@
     $('memeCardLabel').textContent = `${breed} 친구의 한마디`;
     $('resultMeme').textContent = data.meme_message || '';
     $('resultReason').textContent = data.reason || '';
+
+    // Reset image state
+    const img = $('breedImage');
+    img.classList.remove('loaded');
+    $('breedImageSkeleton').style.display = 'block';
+
+    fetchBreedImage(data.breed_image_query).then(url => {
+      if (!url) { $('breedImageWrap').style.display = 'none'; return; }
+      img.onload = () => {
+        img.classList.add('loaded');
+        $('breedImageSkeleton').style.display = 'none';
+      };
+      img.onerror = () => { $('breedImageWrap').style.display = 'none'; };
+      img.src = url;
+    });
   }
 
   // Retry

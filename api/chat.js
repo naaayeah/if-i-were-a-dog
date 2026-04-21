@@ -46,6 +46,7 @@ module.exports = async function handler(req, res) {
 
 {
   "breed": "견종 이름 (한국어, 예: 골든 리트리버)",
+  "breed_image_query": "Dog CEO API(dog.ceo/api)의 breed 슬러그. 영문 소문자. 서브브리드는 슬래시로 구분 (예: retriever/golden, chihuahua, husky, poodle/standard, terrier/yorkshire, corgi/cardigan, bulldog/english, collie/border). 해당 견종이 API에 없으면 가장 유사한 견종 슬러그를 반환해.",
   "dog_age": 6.0,
   "meme_message": "${status}에 맞는 현실 키워드(예: 취준, 야근, 시험 등)를 언급하며 '무슨 소리야, 너 꿈 꿨어?' 스타일로 현실을 부정하고, 개로서 오늘 같이 할 신나는 일을 제안하는 2~3줄 메시지. 말투는 친근하고 따뜻하게. 이모지 절대 사용 금지.",
   "reason": "이 견종으로 분석한 이유 2~3문장. 사용자 특징과 연결해서 재미있게. 이모지 절대 사용 금지."
