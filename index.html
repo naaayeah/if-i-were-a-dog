@@ -116,7 +116,7 @@ function CaptionHeader({ subtitle, title, note }) {
   return (
     <div>
       <div style={{ fontFamily: 'monospace', fontSize: 11, letterSpacing: 2, color: '#111', marginBottom: 8 }}>
-        {subtitle} • 내가 개라면
+        {subtitle}
       </div>
       <h1 style={{ fontSize: 40, fontWeight: 900, letterSpacing: -1.5, lineHeight: 1.02, color: '#111', marginBottom: 8 }}>
         {title}
@@ -133,7 +133,7 @@ function StatusStep({ value, onChange }) {
   const sfx = useSFX();
   return (
     <div style={{ padding: '0 20px' }}>
-      <CaptionHeader subtitle="STEP 1 / 3" title={<>너 지금<br/>뭐하고 살아?</>} note="solo q. 하나만 골라" />
+      <CaptionHeader subtitle="STEP 1 / 3" title="내가 개라면..." note="내 현재 상태/직업은?" />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 24 }}>
         {STATUSES.map(s => {
           const sel = value === s.value;
@@ -167,7 +167,7 @@ function TraitsStep({ selected, onToggle }) {
   const sfx = useSFX();
   return (
     <div style={{ padding: '0 20px' }}>
-      <CaptionHeader subtitle="STEP 2 / 3" title={<>너는<br/>어떤 애야?</>} note="multi. 고를수록 정확해짐 ↓" />
+      <CaptionHeader subtitle="STEP 2 / 3" title="내가 개라면..." note="내 성격은? 여러개 고를수록 정확해짐" />
       <div style={{ marginTop: 20 }}>
         {TRAIT_GROUPS.map(group => (
           <div key={group.key} style={{ marginBottom: 22 }}>
@@ -207,7 +207,7 @@ function AgeStep({ value, onChange }) {
   const sfx = useSFX();
   return (
     <div style={{ padding: '0 20px' }}>
-      <CaptionHeader subtitle="STEP 3 / 3" title={<>몇 살이야<br/>진짜로?</>} note="* 거짓말 탐지기 탑재" />
+      <CaptionHeader subtitle="STEP 3 / 3" title="내가 개라면..." note="내 나이는?" />
       <div style={{ marginTop: 30, padding: '24px 20px', background: '#fff', border: '2px solid #111', borderRadius: 0, display: 'flex', alignItems: 'baseline', gap: 10 }}>
         <input type="number" inputMode="numeric" pattern="[0-9]*"
           value={value} onChange={e => { sfx.tap(); onChange(e.target.value); }}
@@ -454,7 +454,7 @@ function DogApp() {
                 </button>
               : <div style={{ width: 32 }} />
             }
-            <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: -0.3 }}>내가 <span>개</span>라면...</div>
+            <div style={{ width: 32 }} />
             <div style={{ width: 32 }} />
           </div>
           <ProgressBar step={step} total={3} />
