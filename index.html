@@ -2,773 +2,505 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>내가 개라면...</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    :root {
-      --primary: #E8294B;
-      --primary-dark: #C41E3A;
-      --primary-light: #FFF0F3;
-      --bg: #F2F4F6;
-      --surface: #FFFFFF;
-      --text-1: #191F28;
-      --text-2: #6B7684;
-      --text-3: #B0B8C1;
-      --border: #E8ECF0;
-      --radius-sm: 4px;
-      --radius-md: 6px;
-      --radius-lg: 10px;
-      --radius-xl: 12px;
-      --radius-full: 100px;
-    }
-
-    html, body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', sans-serif;
-      background: var(--bg);
-      color: var(--text-1);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .page {
-      display: none;
-    }
-    .page.active {
-      display: block;
-    }
-
-    /* ── FORM SCREEN ── */
-    .form-screen .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding-bottom: 120px;
-    }
-
-    .form-header {
-      padding: 56px 24px 32px;
-    }
-
-    .form-header-eyebrow {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--primary);
-      letter-spacing: 0.3px;
-      margin-bottom: 10px;
-    }
-
-    .form-header-title {
-      font-size: 30px;
-      font-weight: 800;
-      color: var(--text-1);
-      line-height: 1.25;
-      margin-bottom: 10px;
-      letter-spacing: -0.5px;
-    }
-
-    .form-header-desc {
-      font-size: 15px;
-      color: var(--text-2);
-      line-height: 1.6;
-    }
-
-    /* Section */
-    .form-section {
-      padding: 0 24px;
-      margin-bottom: 32px;
-    }
-
-    .form-section-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-2);
-      letter-spacing: 0.2px;
-      margin-bottom: 12px;
-    }
-
-    /* Status grid */
-    .status-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .status-card {
-      background: var(--surface);
-      border: 2px solid transparent;
-      border-radius: var(--radius-md);
-      padding: 14px 12px;
-      cursor: pointer;
-      transition: border-color 0.12s, background 0.12s;
-      text-align: center;
-    }
-
-    .status-card:active {
-      transform: scale(0.97);
-    }
-
-    .status-card.selected {
-      border-color: var(--primary);
-      background: var(--primary-light);
-    }
-
-    .status-card-text {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-1);
-    }
-
-    .status-card.selected .status-card-text {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .status-card.full-width {
-      grid-column: 1 / -1;
-    }
-
-    /* Traits */
-    .trait-group {
-      margin-bottom: 16px;
-    }
-
-    .trait-group-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-3);
-      margin-bottom: 8px;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .chip {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-full);
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-1);
-      cursor: pointer;
-      user-select: none;
-      transition: border-color 0.12s, background 0.12s, color 0.12s;
-    }
-
-    .chip:active {
-      transform: scale(0.95);
-    }
-
-    .chip.selected {
-      border-color: var(--primary);
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-
-    /* Age input */
-    .age-box {
-      background: var(--surface);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-    }
-
-    .age-input {
-      flex: 1;
-      border: none;
-      outline: none;
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--text-1);
-      font-family: inherit;
-      background: transparent;
-      width: 80px;
-      min-width: 0;
-    }
-
-    .age-input::placeholder {
-      color: var(--text-3);
-    }
-
-    .age-unit {
-      font-size: 17px;
-      font-weight: 500;
-      color: var(--text-2);
-    }
-
-    /* Fixed submit */
-    .submit-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 12px 24px 40px;
-      background: linear-gradient(to top, var(--bg) 70%, transparent);
-      pointer-events: none;
-    }
-
-    .submit-btn {
-      display: block;
-      width: 100%;
-      max-width: 480px;
-      margin: 0 auto;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.12s, transform 0.1s;
-      font-family: inherit;
-      pointer-events: all;
-    }
-
-    .submit-btn:active {
-      transform: scale(0.98);
-      background: var(--primary-dark);
-    }
-
-    .submit-btn:disabled {
-      background: var(--border);
-      color: var(--text-3);
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* ── LOADING SCREEN ── */
-    .loading-screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 40px 24px;
-      text-align: center;
-    }
-
-    .loading-screen.active {
-      display: flex;
-    }
-
-    .spinner {
-      width: 44px;
-      height: 44px;
-      border: 3px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.75s linear infinite;
-      margin-bottom: 28px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .loading-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-1);
-      margin-bottom: 10px;
-      letter-spacing: -0.3px;
-    }
-
-    .loading-desc {
-      font-size: 14px;
-      color: var(--text-2);
-      line-height: 1.65;
-    }
-
-    /* ── RESULT SCREEN ── */
-    .result-screen .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding-bottom: 60px;
-    }
-
-    .result-header {
-      padding: 56px 24px 24px;
-    }
-
-    .result-eyebrow {
-      display: inline-block;
-      background: var(--primary-light);
-      color: var(--primary);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: var(--radius-full);
-      margin-bottom: 16px;
-      letter-spacing: 0.2px;
-    }
-
-    .result-headline {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 4px;
-    }
-
-    .result-age-big {
-      font-size: 42px;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -1px;
-      line-height: 1.1;
-    }
-
-    .result-slash {
-      font-size: 30px;
-      font-weight: 300;
-      color: var(--text-3);
-    }
-
-    .result-breed {
-      font-size: 38px;
-      font-weight: 800;
-      color: var(--text-1);
-      letter-spacing: -0.8px;
-      line-height: 1.1;
-    }
-
-    /* Breed image */
-    .breed-image-wrap {
-      margin: 0 24px 16px;
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      aspect-ratio: 4 / 3;
-      background: var(--border);
-      position: relative;
-    }
-
-    .breed-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .breed-image.loaded {
-      opacity: 1;
-    }
-
-    .breed-image-skeleton {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, var(--border) 25%, #dde1e6 50%, var(--border) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* Meme card */
-    .meme-card {
-      margin: 0 24px 12px;
-      background: var(--primary);
-      border-radius: var(--radius-xl);
-      padding: 24px;
-    }
-
-    .card-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.55);
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    .meme-text {
-      font-size: 19px;
-      font-weight: 500;
-      color: #fff;
-      line-height: 1.75;
-      white-space: pre-line;
-    }
-
-    /* Reason card */
-    .reason-card {
-      margin: 0 24px 24px;
-      padding: 20px 24px;
-      border-top: 1px solid var(--border);
-    }
-
-    .reason-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-3);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .reason-text {
-      font-size: 13px;
-      color: var(--text-2);
-      line-height: 1.7;
-    }
-
-    /* Retry */
-    .retry-area {
-      padding: 0 24px;
-    }
-
-    .retry-btn {
-      width: 100%;
-      background: var(--surface);
-      color: var(--text-1);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 17px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.12s, transform 0.1s;
-      font-family: inherit;
-    }
-
-    .retry-btn:active {
-      background: var(--bg);
-      transform: scale(0.98);
-    }
-
-    /* Error toast */
-    .toast {
-      position: fixed;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #191F28;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 12px 20px;
-      border-radius: var(--radius-full);
-      opacity: 0;
-      transition: opacity 0.2s, transform 0.2s;
-      pointer-events: none;
-      white-space: nowrap;
-      z-index: 999;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; background: #EFEDE6; font-family: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+    #root { height: 100vh; overflow: hidden; }
   </style>
 </head>
 <body>
+<div id="root"></div>
 
-<!-- FORM SCREEN -->
-<div id="formScreen" class="page form-screen active">
-  <div class="container">
-    <div class="form-header">
-      <div class="form-header-eyebrow">내가 개라면...</div>
-      <h1 class="form-header-title">이곳이 현실일 리 없어</h1>
-      <p class="form-header-desc">왈왈(너 꿈꿨니?).<br>왈왈(산책하러 가자!)</p>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useMemo } = React;
+
+// ─── SFX (Web Audio, no assets) ───────────────────────────────────────────
+const useSFX = () => {
+  const ctxRef = useRef(null);
+  const getCtx = () => {
+    if (!ctxRef.current) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) ctxRef.current = new AC();
+    }
+    return ctxRef.current;
+  };
+  const blip = (freq = 660, dur = 0.08, type = 'square', vol = 0.08) => {
+    const ctx = getCtx(); if (!ctx) return;
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+    o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime + dur);
+  };
+  const tap = () => blip(820, 0.04, 'square', 0.05);
+  const pop = () => blip(540, 0.06, 'triangle', 0.07);
+  const woof = () => { blip(340, 0.09, 'sawtooth', 0.12); setTimeout(() => blip(260, 0.12, 'sawtooth', 0.12), 90); };
+  const drumroll = () => { for (let i = 0; i < 18; i++) setTimeout(() => blip(180 + (i % 2) * 30, 0.04, 'square', 0.06), i * 60); };
+  const reveal = () => { blip(523, 0.12, 'triangle', 0.1); setTimeout(() => blip(784, 0.14, 'triangle', 0.1), 100); setTimeout(() => blip(1046, 0.2, 'triangle', 0.1), 220); };
+  return { tap, pop, woof, drumroll, reveal };
+};
+
+// ─── Constants ─────────────────────────────────────────────────────────────
+const STATUSES = [
+  { value: '중고생', emoji: '🎒' }, { value: '대학생', emoji: '📚' },
+  { value: '취준생', emoji: '💼' }, { value: '직장인', emoji: '☕' },
+  { value: '자영업자·프리랜서', emoji: '🛠️' }, { value: '주부', emoji: '🧺' },
+  { value: '기타', emoji: '✦' },
+];
+
+const TRAIT_GROUPS = [
+  { key: 'personality', label: '내 성격은?', emoji: '🧠', options: ['활발한 편','조용한 편','다정함','독립적','예민한 편','느긋함','고집 있음','사교적','호기심 많음','낙천적','걱정이 많음','리더십 있음','눈치 빠름','솔직한 편','감수성 풍부','겁이 많음','완벽주의','변덕스러운 편','배려심 깊음'] },
+  { key: 'looks', label: '내 외모는?', emoji: '🪞', options: ['키가 큰 편','키가 작은 편','통통한 편','마른 편','곱슬머리','잘 꾸미는 편','무심한 스타일'] },
+  { key: 'habits', label: '내 습관은?', emoji: '🍔', options: ['잠이 많음','잘 먹음','운동을 좋아함','집순이·집돌이','야행성','낮잠을 즐김','깔끔한 편','산만한 편'] },
+];
+
+const BREED_POOL = [
+  { breed: '시바견', query: 'shiba', meme: '나 지금 너 노려보는 중이야.\n밥 언제 줄거야?' },
+  { breed: '웰시코기', query: 'corgi', meme: '다리는 짧아도 마음은 넓어.\n일단 나 좀 쓰다듬고 가.' },
+  { breed: '보더콜리', query: 'collie/border', meme: 'IQ 테스트 같이 풀래?\n내가 먼저 끝내서 미안.' },
+  { breed: '사모예드', query: 'samoyed', meme: '웃는 얼굴에 침 뱉는 사람 없대.\n(근데 내가 먼저 핥을 거임)' },
+  { breed: '말티즈', query: 'maltese', meme: '왈왈왈왈왈왈왈왈.\n(번역: 안아줘)' },
+  { breed: '푸들', query: 'poodle', meme: '내 곱슬머리는 내 아이덴티티.\n건드리지 마세요.' },
+  { breed: '비글', query: 'beagle', meme: '난 못 참지.\n냄새 나는 건 다 내 거.' },
+  { breed: '골든 리트리버', query: 'retriever/golden', meme: '오늘도 너 최고야.\n(내가 매일 말해줄게)' },
+  { breed: '닥스훈트', query: 'dachshund', meme: '길어.\n그게 다야.' },
+  { breed: '포메라니안', query: 'pomeranian', meme: '작지만 목소리는 커.\n왈!왈!왈!왈!왈!' },
+];
+
+// ─── Utilities ─────────────────────────────────────────────────────────────
+function formatDogAge(val) {
+  const n = parseFloat(val);
+  if (isNaN(n)) return '-';
+  const rounded = Math.round(n * 2) / 2;
+  const whole = Math.floor(rounded);
+  return rounded - whole === 0.5 ? `${whole}살 반` : `${whole}살`;
+}
+
+async function fetchBreedImage(query) {
+  const tryFetch = async (url) => {
+    try { const r = await fetch(url); const d = await r.json(); if (d.status === 'success') return d.message; } catch {}
+    return null;
+  };
+  if (query) { const img = await tryFetch(`https://dog.ceo/api/breed/${query}/images/random`); if (img) return img; }
+  return await tryFetch('https://dog.ceo/api/breeds/image/random');
+}
+
+function placeholderBg(breed) {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><defs><pattern id='p' width='10' height='10' patternUnits='userSpaceOnUse' patternTransform='rotate(45)'><rect width='10' height='10' fill='%23eeece4'/><line x1='0' y1='0' x2='0' y2='10' stroke='%23d9d6cc' stroke-width='4'/></pattern></defs><rect width='100%' height='100%' fill='url(%23p)'/><text x='50%' y='50%' font-family='monospace' font-size='14' fill='%23666' text-anchor='middle' dominant-baseline='middle'>${breed || 'dog'} photo</text></svg>`;
+  return `url("data:image/svg+xml;utf8,${svg}")`;
+}
+
+// ─── Progress Bar ───────────────────────────────────────────────────────────
+function ProgressBar({ step, total }) {
+  return (
+    <div style={{ display: 'flex', gap: 6, padding: '0 20px' }}>
+      {Array.from({ length: total }).map((_, i) => (
+        <div key={i} style={{ flex: 1, height: 4, background: i <= step ? '#111' : 'rgba(0,0,0,0.12)', transition: 'background 0.3s' }} />
+      ))}
     </div>
+  );
+}
 
-    <!-- Status -->
-    <div class="form-section">
-      <div class="form-section-label">현재 상태를 선택해주세요</div>
-      <div class="status-grid" id="statusGrid">
-        <div class="status-card" data-value="중고생"><span class="status-card-text">중고생</span></div>
-        <div class="status-card" data-value="대학생"><span class="status-card-text">대학생</span></div>
-        <div class="status-card" data-value="취준생"><span class="status-card-text">취준생</span></div>
-        <div class="status-card" data-value="직장인"><span class="status-card-text">직장인</span></div>
-        <div class="status-card" data-value="자영업자·프리랜서"><span class="status-card-text">자영업자·프리랜서</span></div>
-        <div class="status-card" data-value="주부"><span class="status-card-text">주부</span></div>
-        <div class="status-card full-width" data-value="기타"><span class="status-card-text">기타</span></div>
+// ─── Caption Header (Zine) ─────────────────────────────────────────────────
+function CaptionHeader({ subtitle, title, note }) {
+  return (
+    <div>
+      <div style={{ fontFamily: 'monospace', fontSize: 11, letterSpacing: 2, color: '#111', marginBottom: 8 }}>
+        {subtitle} • 내가 개라면
+      </div>
+      <h1 style={{ fontSize: 40, fontWeight: 900, letterSpacing: -1.5, lineHeight: 1.02, color: '#111', marginBottom: 8 }}>
+        {title}
+      </h1>
+      <div style={{ fontFamily: 'monospace', fontSize: 11, color: '#888', paddingTop: 6 }}>
+        {note}
       </div>
     </div>
+  );
+}
 
-    <!-- Traits -->
-    <div class="form-section">
-      <div class="form-section-label">나의 특징을 선택해주세요 (여러 개 선택 가능)</div>
+// ─── Status Step ───────────────────────────────────────────────────────────
+function StatusStep({ value, onChange }) {
+  const sfx = useSFX();
+  return (
+    <div style={{ padding: '0 20px' }}>
+      <CaptionHeader subtitle="STEP 1 / 3" title={<>너 지금<br/>뭐하고 살아?</>} note="solo q. 하나만 골라" />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 24 }}>
+        {STATUSES.map(s => {
+          const sel = value === s.value;
+          return (
+            <button key={s.value} onClick={() => { sfx.tap(); onChange(s.value); }}
+              style={{
+                gridColumn: s.value === '기타' ? '1 / -1' : 'auto',
+                padding: '18px 14px',
+                border: `2px solid #111`,
+                background: sel ? '#111' : '#fff',
+                color: sel ? '#fff' : '#111',
+                borderRadius: 0,
+                fontSize: 15, fontWeight: 700,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                cursor: 'pointer', transition: 'all 0.15s',
+                transform: sel ? 'scale(1.02)' : 'scale(1)',
+                fontFamily: 'inherit',
+              }}>
+              <span style={{ fontSize: 18 }}>{s.emoji}</span>
+              <span>{s.value}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
-      <div class="trait-group">
-        <div class="trait-group-label">내 성격 특징은?</div>
-        <div class="chips" id="traitChips">
-          <div class="chip" data-value="활발한 편">활발한 편</div>
-          <div class="chip" data-value="조용한 편">조용한 편</div>
-          <div class="chip" data-value="다정함">다정함</div>
-          <div class="chip" data-value="독립적">독립적</div>
-          <div class="chip" data-value="예민한 편">예민한 편</div>
-          <div class="chip" data-value="느긋함">느긋함</div>
-          <div class="chip" data-value="고집 있음">고집 있음</div>
-          <div class="chip" data-value="사교적">사교적</div>
-          <div class="chip" data-value="호기심 많음">호기심 많음</div>
-          <div class="chip" data-value="낙천적">낙천적</div>
-          <div class="chip" data-value="걱정이 많음">걱정이 많음</div>
-          <div class="chip" data-value="리더십 있음">리더십 있음</div>
-          <div class="chip" data-value="눈치 빠름">눈치 빠름</div>
-          <div class="chip" data-value="솔직한 편">솔직한 편</div>
-          <div class="chip" data-value="감수성 풍부">감수성 풍부</div>
-          <div class="chip" data-value="겁이 많음">겁이 많음</div>
-          <div class="chip" data-value="완벽주의">완벽주의</div>
-          <div class="chip" data-value="변덕스러운 편">변덕스러운 편</div>
-          <div class="chip" data-value="배려심 깊음">배려심 깊음</div>
+// ─── Traits Step ───────────────────────────────────────────────────────────
+function TraitsStep({ selected, onToggle }) {
+  const sfx = useSFX();
+  return (
+    <div style={{ padding: '0 20px' }}>
+      <CaptionHeader subtitle="STEP 2 / 3" title={<>너는<br/>어떤 애야?</>} note="multi. 고를수록 정확해짐 ↓" />
+      <div style={{ marginTop: 20 }}>
+        {TRAIT_GROUPS.map(group => (
+          <div key={group.key} style={{ marginBottom: 22 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10, color: '#6b6b6b', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span>{group.emoji}</span> {group.label}
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {group.options.map(opt => {
+                const sel = selected.has(opt);
+                return (
+                  <button key={opt} onClick={() => { sfx.pop(); onToggle(opt); }}
+                    style={{
+                      padding: '7px 12px',
+                      border: '1.5px solid #111',
+                      background: sel ? '#111' : '#fff',
+                      color: sel ? '#fff' : '#333',
+                      borderRadius: 0,
+                      fontSize: 13, fontWeight: 600,
+                      cursor: 'pointer', transition: 'all 0.12s',
+                      fontFamily: 'inherit',
+                      transform: sel ? 'scale(1.05)' : 'scale(1)',
+                    }}>
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Age Step ──────────────────────────────────────────────────────────────
+function AgeStep({ value, onChange }) {
+  const sfx = useSFX();
+  return (
+    <div style={{ padding: '0 20px' }}>
+      <CaptionHeader subtitle="STEP 3 / 3" title={<>몇 살이야<br/>진짜로?</>} note="* 거짓말 탐지기 탑재" />
+      <div style={{ marginTop: 30, padding: '24px 20px', background: '#fff', border: '2px solid #111', borderRadius: 0, display: 'flex', alignItems: 'baseline', gap: 10 }}>
+        <input type="number" inputMode="numeric" pattern="[0-9]*"
+          value={value} onChange={e => { sfx.tap(); onChange(e.target.value); }}
+          placeholder="25" min="1" max="120"
+          style={{ flex: 1, border: 'none', outline: 'none', fontSize: 56, fontWeight: 900, color: '#111', background: 'transparent', fontFamily: 'inherit', width: '100%', padding: 0, minWidth: 0 }} />
+        <span style={{ fontSize: 22, fontWeight: 700, color: '#666' }}>세</span>
+      </div>
+      <div style={{ marginTop: 14, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        {[13, 15, 18, 20, 25, 30].map(age => (
+          <button key={age} onClick={() => { sfx.pop(); onChange(String(age)); }}
+            style={{ padding: '6px 12px', fontSize: 12, fontWeight: 700, border: '1.5px solid rgba(0,0,0,0.15)', background: '#fff', borderRadius: 99, cursor: 'pointer', fontFamily: 'inherit', color: '#555' }}>
+            {age}세
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Loading Screen ────────────────────────────────────────────────────────
+function LoadingScreen() {
+  const [icon, setIcon] = useState('🦴');
+  const [msgIdx, setMsgIdx] = useState(0);
+  const msgs = ['너 냄새 맡는 중...', '견종 도감 뒤적이는 중...', '강아지들 투표 중...', '결과 포장하는 중...'];
+  useEffect(() => {
+    const icons = ['🦴', '🐾', '🦴', '🐕'];
+    let i = 0;
+    const t = setInterval(() => { i = (i + 1) % icons.length; setIcon(icons[i]); }, 300);
+    const m = setInterval(() => setMsgIdx(x => (x + 1) % msgs.length), 900);
+    return () => { clearInterval(t); clearInterval(m); };
+  }, []);
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 24px', background: '#EFEDE6', textAlign: 'center', gap: 24 }}>
+      <div style={{ fontSize: 96, animation: 'wiggle 0.6s ease-in-out infinite' }}>{icon}</div>
+      <div>
+        <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: -0.6, marginBottom: 8 }}>너한테 맞는 개<br/>찾는 중</div>
+        <div style={{ fontFamily: '"Gaegu", cursive', fontSize: 18, color: '#666', minHeight: 28 }}>{msgs[msgIdx]}</div>
+      </div>
+      <style>{`@keyframes wiggle { 0%,100%{transform:rotate(-8deg)scale(1)}50%{transform:rotate(8deg)scale(1.1)} }`}</style>
+    </div>
+  );
+}
+
+// ─── Suspense View ─────────────────────────────────────────────────────────
+function SuspenseView({ phase }) {
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 24px', gap: 18, textAlign: 'center' }}>
+      <div style={{ fontSize: 80, animation: phase === 'flipping' ? 'flipScale 0.6s ease-out' : 'shake 0.15s infinite' }}>🎴</div>
+      <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: -1 }}>{phase === 'flipping' ? '짠!' : '두구두구두구...'}</div>
+      <div style={{ fontFamily: '"Gaegu", cursive', fontSize: 20, color: '#666' }}>{phase === 'flipping' ? '너의 견종은...' : '집중해봐'}</div>
+      <style>{`
+        @keyframes shake { 0%{transform:translate(-1px,1px)rotate(-1deg)}50%{transform:translate(1px,-1px)rotate(1deg)}100%{transform:translate(-1px,-1px)rotate(0deg)} }
+        @keyframes flipScale { 0%{transform:scale(0.6)rotateY(180deg);opacity:0}60%{transform:scale(1.3)rotateY(0);opacity:1}100%{transform:scale(1)rotateY(0)} }
+      `}</style>
+    </div>
+  );
+}
+
+// ─── Compatible Card ───────────────────────────────────────────────────────
+function CompatibleCard({ breed }) {
+  const compatible = useMemo(() => {
+    const pool = BREED_POOL.filter(b => b.breed !== breed);
+    return pool[Math.floor(Math.random() * pool.length)];
+  }, [breed]);
+  const [url, setUrl] = useState(null);
+  useEffect(() => { fetchBreedImage(compatible.query).then(u => setUrl(u)); }, [compatible.query]);
+  const oneLine = (compatible.meme || '').split('\n')[0];
+  return (
+    <div style={{ margin: '16px 20px 20px', padding: 14, background: '#fff', border: '1.5px solid rgba(0,0,0,0.12)', borderRadius: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ width: 52, height: 52, borderRadius: 0, background: url ? `url(${url}) center/cover` : '#ddd', backgroundSize: 'cover', border: '1.5px solid rgba(0,0,0,0.12)', flexShrink: 0 }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 1.5, color: '#888', marginBottom: 2 }}>💘 너랑 잘 맞는 강아지</div>
+        <div style={{ fontSize: 16, fontWeight: 900, color: '#111', marginBottom: 4 }}>{compatible.breed}</div>
+        <div style={{ fontSize: 12, color: '#555', fontFamily: '"Gaegu", cursive', lineHeight: 1.35, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {compatible.breed}의 한마디 — "{oneLine}"
         </div>
       </div>
+    </div>
+  );
+}
 
-      <div class="trait-group">
-        <div class="trait-group-label">내 외모 특징은?</div>
-        <div class="chips">
-          <div class="chip" data-value="키가 큰 편">키가 큰 편</div>
-          <div class="chip" data-value="키가 작은 편">키가 작은 편</div>
-          <div class="chip" data-value="통통한 편">통통한 편</div>
-          <div class="chip" data-value="마른 편">마른 편</div>
-          <div class="chip" data-value="곱슬머리">곱슬머리</div>
-          <div class="chip" data-value="잘 꾸미는 편">잘 꾸미는 편</div>
-          <div class="chip" data-value="무심한 스타일">무심한 스타일</div>
+// ─── Result View ───────────────────────────────────────────────────────────
+function ResultView({ data, onRetry, onShare, saved }) {
+  const [imgUrl, setImgUrl] = useState(null);
+  const breed = data.breed || '-';
+  const dogAge = formatDogAge(data.dog_age);
+
+  useEffect(() => { fetchBreedImage(data.breed_image_query).then(url => setImgUrl(url)); }, [data.breed_image_query]);
+
+  return (
+    <div style={{ padding: '20px 20px 40px' }}>
+      {/* Main card */}
+      <div style={{ background: '#fff', border: '2px solid #111', borderRadius: 0, boxShadow: '4px 4px 0 #111', overflow: 'hidden', animation: 'fadeUp 0.5s 0.1s both' }}>
+        {/* Image */}
+        <div style={{ position: 'relative', aspectRatio: '4/3', background: imgUrl ? `url(${imgUrl}) center/cover` : placeholderBg(breed), backgroundSize: 'cover', backgroundColor: '#eeece4' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 50%)' }} />
         </div>
-      </div>
 
-      <div class="trait-group">
-        <div class="trait-group-label">나의 습관은?</div>
-        <div class="chips">
-          <div class="chip" data-value="잠이 많음">잠이 많음</div>
-          <div class="chip" data-value="잘 먹음">잘 먹음</div>
-          <div class="chip" data-value="운동을 좋아함">운동을 좋아함</div>
-          <div class="chip" data-value="집순이·집돌이">집순이·집돌이</div>
-          <div class="chip" data-value="야행성">야행성</div>
-          <div class="chip" data-value="낮잠을 즐김">낮잠을 즐김</div>
-          <div class="chip" data-value="깔끔한 편">깔끔한 편</div>
-          <div class="chip" data-value="산만한 편">산만한 편</div>
+        {/* Headline */}
+        <div style={{ padding: '20px 20px 0' }}>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, color: '#111', marginBottom: 6, fontFamily: 'monospace' }}>
+            내가 <span style={{ color: '#111' }}>개</span>라면...
+          </div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 38, fontWeight: 900, letterSpacing: -1.5, color: '#111', lineHeight: 1 }}>{dogAge}</span>
+            <span style={{ fontSize: 24, color: '#bbb', fontWeight: 300 }}>/</span>
+            <span style={{ fontSize: 34, fontWeight: 900, letterSpacing: -1.2, color: '#111', lineHeight: 1 }}>{breed}</span>
+          </div>
         </div>
+
+        {/* Speech bubble */}
+        <div style={{ margin: '20px 20px 16px', position: 'relative' }}>
+          <div style={{ padding: '16px 20px 18px', background: '#111', color: '#fff', border: '2px solid #111', borderRadius: 0, position: 'relative', boxShadow: '3px 3px 0 #9a9a9a' }}>
+            <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, marginBottom: 8, opacity: 0.6 }}>{breed} 친구의 한마디</div>
+            <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.55, whiteSpace: 'pre-line', fontFamily: '"Gaegu", "Pretendard Variable", sans-serif' }}>{data.meme_message}</div>
+            {/* Bubble tail */}
+            <div style={{ position: 'absolute', top: -12, right: 28, width: 0, height: 0, borderLeft: '16px solid transparent', borderRight: '10px solid transparent', borderBottom: '14px solid #111' }} />
+          </div>
+        </div>
+
+        {/* Reason */}
+        <div style={{ margin: '4px 20px 20px', padding: '14px 16px', background: '#fff', border: '1.5px solid rgba(0,0,0,0.12)', borderRadius: 0 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#888', marginBottom: 6 }}>이 견종인 이유</div>
+          <div style={{ fontSize: 14, lineHeight: 1.7, color: '#333', whiteSpace: 'pre-line' }}>{data.reason}</div>
+        </div>
+
+        {/* Compatible */}
+        <CompatibleCard breed={breed} />
       </div>
-    </div>
 
-    <!-- Age -->
-    <div class="form-section">
-      <div class="form-section-label">나이</div>
-      <div class="age-box">
-        <input
-          class="age-input"
-          id="ageInput"
-          type="number"
-          inputmode="numeric"
-          pattern="[0-9]*"
-          placeholder="25"
-          min="1"
-          max="120"
-        />
-        <span class="age-unit">세</span>
+      {/* Action bar */}
+      <div style={{ marginTop: 16, display: 'flex', gap: 8, animation: 'fadeUp 0.5s 0.3s both' }}>
+        <button onClick={onShare} style={{ flex: 1, padding: '14px', background: '#111', color: '#fff', border: '2px solid #111', borderRadius: 0, fontSize: 15, fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit' }}>
+          📸 짤 저장 & 공유
+        </button>
+        <button onClick={onRetry} style={{ padding: '14px 18px', background: '#fff', color: '#111', border: '2px solid #111', borderRadius: 0, fontSize: 15, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>
+          🔄 다시
+        </button>
       </div>
+
+      {saved && (
+        <div style={{ position: 'fixed', bottom: 80, left: '50%', transform: 'translateX(-50%)', background: '#111', color: '#fff', padding: '10px 20px', borderRadius: 99, fontSize: 13, fontWeight: 700, animation: 'toastIn 0.3s', zIndex: 100 }}>
+          앨범에 저장됐어 🦴
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeUp { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)} }
+        @keyframes toastIn { from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)} }
+      `}</style>
     </div>
-  </div>
+  );
+}
 
-  <div class="submit-bar">
-    <button class="submit-btn" id="submitBtn" disabled>분석하기</button>
-  </div>
-</div>
+// ─── Result Screen (두구두구 → flip → show) ────────────────────────────────
+function ResultScreen({ data, onRetry }) {
+  const sfx = useSFX();
+  const [phase, setPhase] = useState('suspense');
+  const [saved, setSaved] = useState(false);
 
-<!-- LOADING SCREEN -->
-<div id="loadingScreen" class="loading-screen">
-  <div class="spinner"></div>
-  <div class="loading-title">내가 개라면...</div>
-  <div class="loading-desc">널 찾고 있어.<br>잠깐만 기다려봐.</div>
-</div>
+  useEffect(() => {
+    sfx.drumroll();
+    const t = setTimeout(() => {
+      sfx.reveal();
+      setPhase('flipping');
+      setTimeout(() => setPhase('shown'), 600);
+    }, 1400);
+    return () => clearTimeout(t);
+  }, []);
 
-<!-- RESULT SCREEN -->
-<div id="resultScreen" class="page result-screen">
-  <div class="container">
-    <div class="result-header">
-      <div class="result-eyebrow">나의 견종</div>
-      <div class="result-headline">
-        <span class="result-age-big" id="resultAge">—</span>
-        <span class="result-slash">/</span>
-        <span class="result-breed" id="resultBreed">—</span>
-      </div>
-    </div>
+  const doShare = () => { sfx.woof(); setSaved(true); setTimeout(() => setSaved(false), 1800); };
 
-    <div class="breed-image-wrap" id="breedImageWrap">
-      <div class="breed-image-skeleton" id="breedImageSkeleton"></div>
-      <img class="breed-image" id="breedImage" alt="견종 이미지" />
-    </div>
-
-    <div class="meme-card">
-      <div class="card-label" id="memeCardLabel">친구의 한마디</div>
-      <div class="meme-text" id="resultMeme"></div>
-    </div>
-
-    <div class="reason-card">
-      <div class="reason-label">이 견종인 이유</div>
-      <div class="reason-text" id="resultReason"></div>
-    </div>
-
-    <div class="retry-area">
-      <button class="retry-btn" id="retryBtn">다시 분석하기</button>
-    </div>
-  </div>
-</div>
-
-<!-- Error toast -->
-<div class="toast" id="toast"></div>
-
-<script>
-  const $ = id => document.getElementById(id);
-
-  // State
-  let selectedStatus = '';
-  const selectedTraits = new Set();
-
-  // Screen toggle
-  function showScreen(name) {
-    document.querySelectorAll('.page, .loading-screen').forEach(el => {
-      el.classList.remove('active');
-    });
-    $(name + 'Screen').classList.add('active');
-    window.scrollTo(0, 0);
-  }
-
-  // Status selection
-  $('statusGrid').querySelectorAll('.status-card').forEach(card => {
-    card.addEventListener('click', () => {
-      $('statusGrid').querySelectorAll('.status-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      selectedStatus = card.dataset.value;
-      updateSubmitBtn();
-    });
-  });
-
-  // Trait chip selection (collect all chip containers)
-  document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      chip.classList.toggle('selected');
-      const val = chip.dataset.value;
-      if (chip.classList.contains('selected')) {
-        selectedTraits.add(val);
-      } else {
-        selectedTraits.delete(val);
+  return (
+    <div style={{ height: '100%', overflow: 'auto', background: '#EFEDE6' }}>
+      {phase !== 'shown'
+        ? <SuspenseView phase={phase} />
+        : <ResultView data={data} onRetry={onRetry} onShare={doShare} saved={saved} />
       }
-    });
-  });
+    </div>
+  );
+}
 
-  // Age input
-  $('ageInput').addEventListener('input', updateSubmitBtn);
+// ─── Error Toast ───────────────────────────────────────────────────────────
+function ErrorToast({ message, visible }) {
+  if (!visible) return null;
+  return (
+    <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', background: '#191F28', color: '#fff', padding: '12px 20px', borderRadius: 99, fontSize: 13, fontWeight: 600, zIndex: 999, whiteSpace: 'nowrap', animation: 'toastIn 0.2s' }}>
+      {message}
+      <style>{`@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}`}</style>
+    </div>
+  );
+}
 
-  function updateSubmitBtn() {
-    const age = parseInt($('ageInput').value, 10);
-    const valid = selectedStatus && age >= 1 && age <= 120;
-    $('submitBtn').disabled = !valid;
-  }
+// ─── Main App ──────────────────────────────────────────────────────────────
+function DogApp() {
+  const sfx = useSFX();
+  const [screen, setScreen] = useState('quiz'); // quiz | loading | result
+  const [step, setStep] = useState(0);
+  const [status, setStatus] = useState('');
+  const [traits, setTraits] = useState(new Set());
+  const [age, setAge] = useState('');
+  const [result, setResult] = useState(null);
+  const [toast, setToast] = useState({ visible: false, message: '' });
 
-  // Toast
-  function showToast(msg) {
-    const t = $('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2800);
-  }
+  const showToast = (msg) => { setToast({ visible: true, message: msg }); setTimeout(() => setToast({ visible: false, message: '' }), 2800); };
+  const canNext = step === 0 ? !!status : step === 1 ? traits.size >= 1 : parseInt(age, 10) >= 1 && parseInt(age, 10) <= 120;
 
-  // Submit
-  $('submitBtn').addEventListener('click', async () => {
-    const age = parseInt($('ageInput').value, 10);
-    if (!selectedStatus || !age) return;
+  const toggleTrait = (t) => setTraits(prev => { const n = new Set(prev); n.has(t) ? n.delete(t) : n.add(t); return n; });
 
-    showScreen('loading');
+  const next = () => { sfx.pop(); if (step < 2) setStep(step + 1); else submit(); };
+  const back = () => { sfx.tap(); if (step > 0) setStep(step - 1); };
 
+  const submit = async () => {
+    setScreen('loading');
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          status: selectedStatus,
-          traits: Array.from(selectedTraits),
-          age,
-        }),
+        body: JSON.stringify({ status, traits: Array.from(traits), age: parseInt(age, 10) }),
       });
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || '서버 오류');
-      }
-
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || '서버 오류'); }
       const data = await res.json();
-      renderResult(data);
-      showScreen('result');
+      setResult(data);
+      setScreen('result');
     } catch (e) {
-      showScreen('form');
+      setScreen('quiz');
+      setStep(2);
       showToast(e.message || '오류가 발생했어. 다시 시도해봐.');
     }
-  });
+  };
 
-  async function fetchBreedImage(query) {
-    const tryFetch = async (url) => {
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data.status === 'success') return data.message;
-      return null;
-    };
-    if (query) {
-      try {
-        const img = await tryFetch(`https://dog.ceo/api/breed/${query}/images/random`);
-        if (img) return img;
-      } catch {}
-    }
-    try {
-      return await tryFetch('https://dog.ceo/api/breeds/image/random');
-    } catch {}
-    return null;
-  }
+  const reset = () => { sfx.woof(); setScreen('quiz'); setStep(0); setStatus(''); setTraits(new Set()); setAge(''); setResult(null); };
 
-  function formatDogAge(val) {
-    const n = parseFloat(val);
-    if (isNaN(n)) return '-';
-    const rounded = Math.round(n * 2) / 2;
-    const whole = Math.floor(rounded);
-    return rounded - whole === 0.5 ? `${whole}살 반` : `${whole}살`;
-  }
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%', background: '#EFEDE6', fontFamily: "'Pretendard Variable', 'Pretendard', -apple-system, sans-serif", color: '#111', overflow: 'hidden' }}>
 
-  // Render result
-  function renderResult(data) {
-    const breed = data.breed || '-';
-    $('resultBreed').textContent = breed;
-    $('resultAge').textContent = formatDogAge(data.dog_age);
-    $('memeCardLabel').textContent = `${breed} 친구의 한마디`;
-    $('resultMeme').textContent = data.meme_message || '';
-    $('resultReason').textContent = data.reason || '';
+      {/* Top bar: progress (quiz only) */}
+      {screen === 'quiz' && (
+        <div style={{ paddingTop: 16, paddingBottom: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', marginBottom: 14 }}>
+            {step > 0
+              ? <button onClick={back} style={{ width: 32, height: 32, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M13 5l-5 5 5 5" stroke="#111" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              : <div style={{ width: 32 }} />
+            }
+            <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: -0.3 }}>내가 <span>개</span>라면...</div>
+            <div style={{ width: 32 }} />
+          </div>
+          <ProgressBar step={step} total={3} />
+        </div>
+      )}
 
-    // Reset image state
-    const img = $('breedImage');
-    img.classList.remove('loaded');
-    $('breedImageSkeleton').style.display = 'block';
+      {/* Screen body */}
+      <div style={{ position: 'absolute', top: screen === 'quiz' ? 86 : 0, bottom: screen === 'quiz' ? 92 : 0, left: 0, right: 0, overflow: 'auto' }}>
+        {screen === 'quiz' && (
+          <div style={{ paddingTop: 20, paddingBottom: 20 }}>
+            {step === 0 && <StatusStep value={status} onChange={setStatus} />}
+            {step === 1 && <TraitsStep selected={traits} onToggle={toggleTrait} />}
+            {step === 2 && <AgeStep value={age} onChange={setAge} />}
+          </div>
+        )}
+        {screen === 'loading' && <LoadingScreen />}
+        {screen === 'result' && result && <ResultScreen data={result} onRetry={reset} />}
+      </div>
 
-    fetchBreedImage(data.breed_image_query).then(url => {
-      if (!url) { $('breedImageWrap').style.display = 'none'; return; }
-      img.onload = () => {
-        img.classList.add('loaded');
-        $('breedImageSkeleton').style.display = 'none';
-      };
-      img.onerror = () => { $('breedImageWrap').style.display = 'none'; };
-      img.src = url;
-    });
-  }
+      {/* Bottom submit (quiz only) */}
+      {screen === 'quiz' && (
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '14px 20px 28px', background: 'linear-gradient(to top, #EFEDE6 75%, transparent)' }}>
+          <button onClick={next} disabled={!canNext} style={{
+            width: '100%', padding: '16px',
+            background: canNext ? '#111' : 'rgba(0,0,0,0.12)',
+            color: canNext ? '#fff' : '#888',
+            border: '2px solid #111',
+            borderRadius: 0,
+            fontSize: 16, fontWeight: 800, letterSpacing: -0.3,
+            cursor: canNext ? 'pointer' : 'not-allowed',
+            transition: 'all 0.15s', fontFamily: 'inherit',
+            boxShadow: canNext ? '3px 3px 0 #111' : 'none',
+          }}>
+            {step < 2 ? '다음 →' : '🐕 견종 공개!'}
+          </button>
+        </div>
+      )}
 
-  // Retry
-  $('retryBtn').addEventListener('click', () => {
-    showScreen('form');
-  });
+      <ErrorToast message={toast.message} visible={toast.visible} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <DogApp />
+);
 </script>
 </body>
 </html>
